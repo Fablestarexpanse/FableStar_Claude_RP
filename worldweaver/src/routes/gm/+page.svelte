@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import WorldMapEditor from '$lib/components/gm/WorldMapEditor.svelte';
+  import TerrainMapView from '$lib/components/terrain/TerrainMapView.svelte';
   import NpcManager from '$lib/components/gm/NpcManager.svelte';
   import SimulationMonitor from '$lib/components/gm/SimulationMonitor.svelte';
   import EventLogViewer from '$lib/components/gm/EventLogViewer.svelte';
@@ -44,7 +44,7 @@
 
   <main class="dashboard-content">
     {#if activeTab === 'map'}
-      <WorldMapEditor />
+      <TerrainMapView />
     {:else if activeTab === 'npcs'}
       <NpcManager />
     {:else if activeTab === 'monitor'}

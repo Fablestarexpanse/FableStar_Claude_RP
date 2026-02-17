@@ -59,6 +59,16 @@ pub struct IsPlayer;
 #[derive(Component)]
 pub struct IsNpc;
 
+/// Terrain binding for rooms - links room to world map position
+#[derive(Component, Serialize, Deserialize, Clone, Debug)]
+pub struct RoomTerrainBinding {
+    pub world_x: f32,        // meters from origin
+    pub world_z: f32,
+    pub chunk_coord: (i32, i32),
+    pub elevation: f32,
+    pub biome: Option<String>,
+}
+
 // ============================================================================
 // RPG STATS & SKILLS
 // ============================================================================
