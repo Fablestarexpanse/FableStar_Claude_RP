@@ -13,8 +13,16 @@
     activeNpcs: 2,
     totalRooms: 4,
     totalEvents: 0,
-    memoryUsage: '12.4 MB',
-    uptime: '0h 0m'
+    memoryUsage: 12.4, // MB
+    memoryTotal: 64.0, // MB
+    uptime: '0h 0m',
+    cpuLoad: 12.1,
+    gpuLoad: 96.0,
+    temperature: 44,
+    fanSpeed: 30,
+    clockSpeed: 2775,
+    powerDraw: 312.9,
+    powerLimit: 480.0
   });
   
   // System health
@@ -40,8 +48,15 @@
       currentTick = await getWorldTick();
       
       // TODO: Add backend commands for these stats
-      // For now, increment mock data
+      // For now, increment mock data with some variation
       stats.totalEvents = Math.floor(currentTick * 0.5);
+      stats.cpuLoad = 10 + Math.random() * 5;
+      stats.gpuLoad = 94 + Math.random() * 4;
+      stats.temperature = 42 + Math.random() * 4;
+      stats.fanSpeed = 28 + Math.random() * 5;
+      stats.clockSpeed = 2700 + Math.random() * 150;
+      stats.powerDraw = 300 + Math.random() * 30;
+      stats.memoryUsage = 12 + Math.random() * 2;
       
       // Calculate uptime
       const uptimeSeconds = Math.floor(currentTick / tickRate);
@@ -75,64 +90,125 @@
 </script>
 
 <div class="simulation-monitor">
-  <div class="monitor-grid">
-    <!-- Tick Counter -->
-    <div class="monitor-card highlight">
-      <div class="card-icon">⏱️</div>
-      <div class="card-content">
-        <div class="card-label">Current Tick</div>
-        <div class="card-value large">{currentTick.toLocaleString()}</div>
-        <div class="card-sublabel">{tickRate.toFixed(1)} ticks/sec</div>
+  <!-- Header Title -->
+  <div class="monitor-header">
+    <h2>WorldWeaver Simulation Engine</h2>
+    <div class="header-badge"># {currentTick.toLocaleString()}</div>
+  </div>
+
+  <!-- Primary Stats with Progress Bars -->
+  <div class="stats-grid">
+    <!-- CPU Load -->
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-icon">🖥️</span>
+        <span class="stat-label">CPU Load</span>
+        <span class="stat-value">{stats.cpuLoad.toFixed(1)}%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill cpu" style="width: {stats.cpuLoad}%"></div>
+      </div>
+      <div class="stat-detail">{stats.cpuLoad.toFixed(2)}% / 100%</div>
+    </div>
+
+    <!-- GPU Load -->
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-icon">🎮</span>
+        <span class="stat-label">GPU Load</span>
+        <span class="stat-value">{stats.gpuLoad.toFixed(1)}%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill gpu" style="width: {stats.gpuLoad}%"></div>
+      </div>
+      <div class="stat-detail">{stats.gpuLoad.toFixed(2)}% / 100%</div>
+    </div>
+
+    <!-- Memory -->
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-icon">💾</span>
+        <span class="stat-label">Memory</span>
+        <span class="stat-value">{((stats.memoryUsage / stats.memoryTotal) * 100).toFixed(1)}%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill memory" style="width: {(stats.memoryUsage / stats.memoryTotal) * 100}%"></div>
+      </div>
+      <div class="stat-detail">{stats.memoryUsage.toFixed(1)} GB / {stats.memoryTotal.toFixed(1)} GB</div>
+    </div>
+  </div>
+
+  <!-- Technical Readouts Grid -->
+  <div class="readouts-grid">
+    <!-- Temperature -->
+    <div class="readout-card">
+      <div class="readout-icon">🌡️</div>
+      <div class="readout-content">
+        <div class="readout-label">Temperature</div>
+        <div class="readout-value">{stats.temperature}°C</div>
+      </div>
+    </div>
+
+    <!-- Fan Speed -->
+    <div class="readout-card">
+      <div class="readout-icon">🌀</div>
+      <div class="readout-content">
+        <div class="readout-label">Fan Speed</div>
+        <div class="readout-value">{stats.fanSpeed}%</div>
+      </div>
+    </div>
+
+    <!-- Clock Speed -->
+    <div class="readout-card">
+      <div class="readout-icon">⚡</div>
+      <div class="readout-content">
+        <div class="readout-label">Clock Speed</div>
+        <div class="readout-value">{stats.clockSpeed} MHz</div>
+      </div>
+    </div>
+
+    <!-- Power Draw -->
+    <div class="readout-card">
+      <div class="readout-icon">🔌</div>
+      <div class="readout-content">
+        <div class="readout-label">Power Draw</div>
+        <div class="readout-value">{stats.powerDraw.toFixed(1)}W / {stats.powerLimit.toFixed(1)}W</div>
       </div>
     </div>
 
     <!-- NPCs -->
-    <div class="monitor-card">
-      <div class="card-icon">👥</div>
-      <div class="card-content">
-        <div class="card-label">NPCs</div>
-        <div class="card-value">{stats.activeNpcs} / {stats.totalNpcs}</div>
-        <div class="card-sublabel">Active / Total</div>
+    <div class="readout-card">
+      <div class="readout-icon">👥</div>
+      <div class="readout-content">
+        <div class="readout-label">NPCs</div>
+        <div class="readout-value">{stats.activeNpcs} / {stats.totalNpcs}</div>
       </div>
     </div>
 
     <!-- Rooms -->
-    <div class="monitor-card">
-      <div class="card-icon">🗺️</div>
-      <div class="card-content">
-        <div class="card-label">Rooms</div>
-        <div class="card-value">{stats.totalRooms}</div>
-        <div class="card-sublabel">Loaded</div>
+    <div class="readout-card">
+      <div class="readout-icon">🗺️</div>
+      <div class="readout-content">
+        <div class="readout-label">Rooms</div>
+        <div class="readout-value">{stats.totalRooms}</div>
       </div>
     </div>
 
     <!-- Events -->
-    <div class="monitor-card">
-      <div class="card-icon">📜</div>
-      <div class="card-content">
-        <div class="card-label">Events</div>
-        <div class="card-value">{stats.totalEvents.toLocaleString()}</div>
-        <div class="card-sublabel">Total Recorded</div>
-      </div>
-    </div>
-
-    <!-- Memory -->
-    <div class="monitor-card">
-      <div class="card-icon">💾</div>
-      <div class="card-content">
-        <div class="card-label">Memory</div>
-        <div class="card-value">{stats.memoryUsage}</div>
-        <div class="card-sublabel">In Use</div>
+    <div class="readout-card">
+      <div class="readout-icon">📜</div>
+      <div class="readout-content">
+        <div class="readout-label">Events</div>
+        <div class="readout-value">{stats.totalEvents.toLocaleString()}</div>
       </div>
     </div>
 
     <!-- Uptime -->
-    <div class="monitor-card">
-      <div class="card-icon">⏰</div>
-      <div class="card-content">
-        <div class="card-label">Uptime</div>
-        <div class="card-value">{stats.uptime}</div>
-        <div class="card-sublabel">Running Time</div>
+    <div class="readout-card">
+      <div class="readout-icon">⏰</div>
+      <div class="readout-content">
+        <div class="readout-label">Uptime</div>
+        <div class="readout-value">{stats.uptime}</div>
       </div>
     </div>
   </div>
@@ -216,231 +292,322 @@
   .simulation-monitor {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
     height: 100%;
     overflow-y: auto;
+    padding: 0.5rem;
   }
 
-  .monitor-grid {
+  .monitor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: hsl(220, 14%, 8%);
+    border: 1px solid hsl(220, 10%, 18%);
+    border-radius: 0.375rem;
+  }
+
+  .monitor-header h2 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgb(243, 244, 246);
+  }
+
+  .header-badge {
+    font-size: 0.75rem;
+    color: rgb(156, 163, 175);
+    font-family: 'Courier New', monospace;
+  }
+
+  .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 0.75rem;
   }
 
-  .monitor-card {
+  .stat-card {
+    background: hsl(220, 14%, 8%);
+    border: 1px solid hsl(220, 10%, 18%);
+    border-radius: 0.375rem;
+    padding: 0.875rem;
+  }
+
+  .stat-header {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1.5rem;
-    background: rgba(20, 25, 35, 0.8);
-    border: 1px solid rgba(139, 149, 165, 0.2);
-    border-radius: 8px;
-    transition: all 0.2s;
+    gap: 0.625rem;
+    margin-bottom: 0.625rem;
   }
 
-  .monitor-card:hover {
-    border-color: #ff6b35;
-    transform: translateY(-2px);
+  .stat-icon {
+    font-size: 1rem;
   }
 
-  .monitor-card.highlight {
-    border-color: #ff6b35;
-    background: rgba(255, 107, 53, 0.1);
-  }
-
-  .card-icon {
-    font-size: 2rem;
-  }
-
-  .card-content {
+  .stat-label {
     flex: 1;
+    font-size: 0.875rem;
+    color: rgb(156, 163, 175);
+    font-weight: 500;
   }
 
-  .card-label {
-    font-size: 0.85rem;
-    color: #8b95a5;
+  .stat-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgb(243, 244, 246);
+    font-family: 'Courier New', monospace;
+  }
+
+  .progress-bar {
+    height: 1.25rem;
+    background: hsl(220, 14%, 14%);
+    border-radius: 0.25rem;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+
+  .progress-fill {
+    height: 100%;
+    transition: width 0.3s ease;
+    border-radius: 0.25rem;
+  }
+
+  .progress-fill.cpu {
+    background: linear-gradient(90deg, rgb(59, 130, 246), rgb(96, 165, 250));
+  }
+
+  .progress-fill.gpu {
+    background: linear-gradient(90deg, rgb(239, 68, 68), rgb(248, 113, 113));
+  }
+
+  .progress-fill.memory {
+    background: linear-gradient(90deg, rgb(59, 130, 246), rgb(147, 197, 253));
+  }
+
+  .stat-detail {
+    font-size: 0.75rem;
+    color: rgb(156, 163, 175);
+    font-family: 'Courier New', monospace;
+  }
+
+  .readouts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .readout-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem;
+    background: hsl(220, 14%, 8%);
+    border: 1px solid hsl(220, 10%, 18%);
+    border-radius: 0.375rem;
+    transition: all 0.15s ease;
+  }
+
+  .readout-card:hover {
+    border-color: rgb(59, 130, 246);
+    background: hsl(220, 14%, 10%);
+  }
+
+  .readout-icon {
+    font-size: 1.25rem;
+  }
+
+  .readout-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .readout-label {
+    font-size: 0.75rem;
+    color: rgb(156, 163, 175);
     margin-bottom: 0.25rem;
   }
 
-  .card-value {
-    font-size: 1.5rem;
+  .readout-value {
+    font-size: 0.875rem;
     font-weight: 600;
-    color: #e0e6ed;
-    line-height: 1.2;
-  }
-
-  .card-value.large {
-    font-size: 2rem;
-    color: #ff6b35;
-  }
-
-  .card-sublabel {
-    font-size: 0.75rem;
-    color: #8b95a5;
-    margin-top: 0.25rem;
+    color: rgb(243, 244, 246);
+    font-family: 'Courier New', monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .control-panel,
   .health-panel,
   .graph-panel {
-    background: rgba(20, 25, 35, 0.8);
-    border: 1px solid rgba(139, 149, 165, 0.2);
-    border-radius: 8px;
-    padding: 1.5rem;
+    background: hsl(220, 14%, 8%);
+    border: 1px solid hsl(220, 10%, 18%);
+    border-radius: 0.375rem;
+    padding: 1rem;
   }
 
   .control-panel h3,
   .health-panel h3,
   .graph-panel h3 {
-    margin: 0 0 1.5rem 0;
-    color: #ff6b35;
-    font-size: 1.1rem;
+    margin: 0 0 1rem 0;
+    color: rgb(243, 244, 246);
+    font-size: 0.875rem;
+    font-weight: 600;
   }
 
   .controls-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
   }
 
   .control-group {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
 
   .control-group label {
-    font-size: 0.9rem;
-    color: #8b95a5;
+    font-size: 0.75rem;
+    color: rgb(156, 163, 175);
     font-weight: 500;
   }
 
   .btn-toggle {
-    padding: 0.75rem 1.5rem;
-    background: rgba(139, 149, 165, 0.2);
-    border: 1px solid rgba(139, 149, 165, 0.3);
-    border-radius: 6px;
-    color: #e0e6ed;
-    font-size: 0.95rem;
+    padding: 0.625rem 1rem;
+    background: hsl(220, 14%, 14%);
+    border: 1px solid hsl(220, 10%, 22%);
+    border-radius: 0.375rem;
+    color: rgb(243, 244, 246);
+    font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.15s ease;
   }
 
   .btn-toggle.running {
-    background: rgba(76, 175, 80, 0.2);
-    border-color: #4caf50;
-    color: #4caf50;
+    background: rgba(34, 197, 94, 0.1);
+    border-color: rgb(34, 197, 94);
+    color: rgb(34, 197, 94);
   }
 
   .btn-toggle:hover {
-    transform: translateY(-1px);
+    background: hsl(220, 14%, 16%);
+    border-color: rgb(59, 130, 246);
   }
 
   .tick-rate-controls {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   .tick-rate-display {
     flex: 1;
     text-align: center;
-    padding: 0.75rem;
-    background: rgba(15, 20, 30, 0.6);
-    border: 1px solid rgba(139, 149, 165, 0.3);
-    border-radius: 6px;
-    color: #e0e6ed;
+    padding: 0.625rem;
+    background: hsl(220, 14%, 14%);
+    border: 1px solid hsl(220, 10%, 22%);
+    border-radius: 0.375rem;
+    color: rgb(243, 244, 246);
     font-weight: 600;
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
   }
 
   .btn-small {
-    padding: 0.5rem 1rem;
-    background: rgba(139, 149, 165, 0.2);
-    border: 1px solid rgba(139, 149, 165, 0.3);
-    border-radius: 6px;
-    color: #e0e6ed;
-    font-size: 1.2rem;
+    padding: 0.5rem 0.875rem;
+    background: hsl(220, 14%, 14%);
+    border: 1px solid hsl(220, 10%, 22%);
+    border-radius: 0.375rem;
+    color: rgb(243, 244, 246);
+    font-size: 1rem;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.15s ease;
   }
 
   .btn-small:hover {
-    background: rgba(139, 149, 165, 0.3);
+    background: hsl(220, 14%, 16%);
+    border-color: rgb(59, 130, 246);
   }
 
   .btn-danger {
-    padding: 0.75rem 1.5rem;
-    background: rgba(220, 53, 69, 0.2);
-    border: 1px solid rgba(220, 53, 69, 0.3);
-    border-radius: 6px;
-    color: #ff6b6b;
-    font-size: 0.95rem;
+    padding: 0.625rem 1rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 0.375rem;
+    color: rgb(248, 113, 113);
+    font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.15s ease;
   }
 
   .btn-danger:hover {
-    background: rgba(220, 53, 69, 0.3);
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgb(239, 68, 68);
   }
 
   .health-grid {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   .health-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
-    background: rgba(15, 20, 30, 0.4);
-    border-radius: 6px;
+    padding: 0.75rem;
+    background: hsl(220, 14%, 14%);
+    border: 1px solid hsl(220, 10%, 22%);
+    border-radius: 0.375rem;
   }
 
   .health-label {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    font-size: 0.95rem;
-    color: #e0e6ed;
+    gap: 0.625rem;
+    font-size: 0.875rem;
+    color: rgb(243, 244, 246);
   }
 
   .health-icon {
-    font-size: 1.2rem;
-    color: #8b95a5;
+    font-size: 1rem;
+    color: rgb(156, 163, 175);
   }
 
   .health-icon.healthy {
-    color: #4caf50;
+    color: rgb(34, 197, 94);
   }
 
   .health-status {
-    font-size: 0.85rem;
-    color: #4caf50;
+    font-size: 0.75rem;
+    color: rgb(34, 197, 94);
     font-weight: 600;
     text-transform: uppercase;
+    font-family: 'Courier New', monospace;
   }
 
   .graph-placeholder {
-    min-height: 200px;
+    min-height: 150px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(15, 20, 30, 0.4);
-    border: 2px dashed rgba(139, 149, 165, 0.3);
-    border-radius: 6px;
-    color: #8b95a5;
+    background: hsl(220, 14%, 14%);
+    border: 1px dashed hsl(220, 10%, 22%);
+    border-radius: 0.375rem;
+    color: rgb(156, 163, 175);
   }
 
   .graph-placeholder p {
     margin: 0.25rem 0;
+    font-size: 0.875rem;
   }
 
   .graph-placeholder .hint {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
   }
 </style>
