@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Rajdhani:wght@300;400;600&family=Roboto+Mono&display=swap');
+
+:root {
+  /* Color Palette - Modern Sci-Fi Theme from Sketch */
+  --color-bg-primary: #1a2332;      /* Deep blue-grey background */
+  --color-bg-secondary: #0f1720;    /* Darker blue-grey */
+  --color-accent-primary: #ff8c42;  /* Vibrant orange accent */
+  --color-accent-dark: #d97132;     /* Darker orange */
+  --color-text-primary: #e8f0f7;    /* Cool white text */
+  --color-text-muted: #7a8a9e;      /* Muted blue-grey */
+  --color-border: #2d3e52;          /* Border color */
+  --color-panel: #1e2d3f;           /* Panel background */
+  
+  /* Layout */
+  --sidebar-width: 240px;
+  --toolbar-height: 48px;
+  --panel-spacing: 8px;
+  
+  /* Typography */
+  --font-heading: 'Orbitron', sans-serif;
+  --font-body: 'Rajdhani', sans-serif;
+  --font-mono: 'Roboto Mono', monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.6;
+  overflow: hidden;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-dark);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--color-accent-primary);
+  color: var(--color-bg-primary);
+}
